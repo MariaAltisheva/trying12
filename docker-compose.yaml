@@ -10,7 +10,7 @@ services:
     volumes:
       - pg_data_todolist:/var/lib/postgresql/data
     healthcheck:
-      test: pg_isready -U postgres
+      test: pg_isready -U mari
       interval: 5s
       timeout: 3s
       retries: 3
@@ -18,6 +18,19 @@ services:
       - "5432:5432"
     networks:
       - backend_nw
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - src/.env
+    environment:
+      POSTGRES_HOST: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   pg_data_todolist:
