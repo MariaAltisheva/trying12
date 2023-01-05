@@ -11,9 +11,6 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
 
 
-#    restart: always
-#    env_file:
-#      - src/.env
     volumes:
       - pg_data_todolist:/var/lib/postgresql/data
     healthcheck:
@@ -21,8 +18,6 @@ services:
       interval: 5s
       timeout: 3s
       retries: 3
-#    networks:
-#      - backend_nw
 
   api:
     image: ${DOCKERHUB_USERNAME}/trying12:latest
