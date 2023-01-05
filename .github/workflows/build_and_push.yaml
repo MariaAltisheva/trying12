@@ -44,7 +44,6 @@ jobs:
         run: |
           envsubst '$DOCKERHUB_USERNAME' < deploy/docker-compose.yaml > deploy/tmp.docker-compose.yaml
           mv deploy/tmp.docker-compose.yaml deploy/docker-compose.yaml
-      - uses: actions/checkout@master
       - name: Copy on server
         uses: appleboy/scp-action@v0.0.10
         with:
@@ -52,5 +51,5 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           sourse: "deploy/*"
-          target: todolist
+          target: "todolist"
           strip_components: 1
