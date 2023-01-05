@@ -15,7 +15,7 @@ RUN poetry config virtualenvs.create false \
     && poetry install --no-dev --no-ansi --no-root
 
 COPY src/ ./
-COPY entrypoint.sh ./entrypoint.sh
+#COPY entrypoint.sh ./entrypoint.sh
 
 USER api
 
