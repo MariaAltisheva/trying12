@@ -21,7 +21,7 @@ services:
     volumes:
       - pg_data_todolist:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres -d todoisto" ]
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d todolist" ]
       interval: 5s
       timeout: 3s
       retries: 3
@@ -58,7 +58,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: python ./backend/manage.py runbot
+    command: python ./src/manage.py runbot
     networks:
       - backend_nw
 
