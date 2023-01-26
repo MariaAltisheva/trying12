@@ -42,7 +42,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
+    'django_filters',
+    'social_django',
+
     'core',
+    # 'goals',
+    # 'bot',
+
+    'drf_spectacular'
 ]
 
 MIDDLEWARE = [
@@ -159,4 +168,11 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKEND': (
         'django_filters.rest_framework.DjangoFilterBackend',
     )
+}
+
+# SPECTACULAR
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Todolist API',
+    'DESCRIPTION': 'API for todolist application',
+    'VERSION': '1.0.0',
 }
