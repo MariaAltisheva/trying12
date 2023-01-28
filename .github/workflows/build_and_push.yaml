@@ -40,7 +40,7 @@ jobs:
       DEBUG: ${{ secrets.DEBUG }}
       SOCIAL_AUTH_VK_OAUTH2_KEY: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_KEY }}
       SOCIAL_AUTH_VK_OAUTH2_SECRET: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_SECRET }}
-      DOCKER_USER: ${{ secrets.DOCKER_USER }}
+      DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
       BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
     steps:
       - name: Checkout
@@ -76,5 +76,3 @@ jobs:
             docker-compose pull
             docker-compose up -d
             docker system prune -a -f
-
-# hello
