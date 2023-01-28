@@ -24,3 +24,5 @@ class UserAdmin(BaseUserAdmin):
             {'fields': ('last_login', 'date_joined')}
         )
     )
+
+#
