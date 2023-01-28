@@ -76,5 +76,3 @@ jobs:
             docker-compose pull
             docker-compose up -d
             docker system prune -a -f
-
-# hello
