@@ -30,7 +30,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=["*"])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 
 
 # Application definition
@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'social_django',
 
     'core',
-    # 'goals',
+    'goals',
     # 'bot',
 
     'drf_spectacular'
