@@ -2,7 +2,7 @@ version: '2.2'
 
 services:
   frontend:
-    image: sermalenk/skypro-front:lesson-38
+    image: sermalenk/skypro-front:lesson-36
     restart: always
     depends_on:
       - api
