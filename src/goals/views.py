@@ -116,7 +116,7 @@ class GoalCommentListView(ListAPIView):
             user_id=self.request.user.id,
             # goal__category__board__participants__user_id=self.request.user.id
         )
-
+#
 
 class GoalCommentView(RetrieveUpdateDestroyAPIView):
     model = GoalComment
