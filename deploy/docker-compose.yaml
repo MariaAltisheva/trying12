@@ -63,7 +63,7 @@ services:
         postgres:
           condition: service_healthy
       command: >
-          sh -c "python3 manage.py migrate"
+          sh -c "python3 src/manage.py migrate"
 
   bot:
     image: ${DOCKERHUB_USERNAME}/trying12:$GITHUB_REF_NAME-$GITHUB_RUN_ID
