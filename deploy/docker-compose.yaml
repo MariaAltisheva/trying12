@@ -63,7 +63,7 @@ services:
         postgres:
           condition: service_healthy
       command: >
-          sh -c "python3 manage.py migrate"
+          sh -c "python3 scr/manage.py migrate"
 
   bot:
     image: ${DOCKERHUB_USERNAME}/trying12:$GITHUB_REF_NAME-$GITHUB_RUN_ID
@@ -84,7 +84,7 @@ services:
       SOCIAL_AUTH_VK_OAUTH2_SECRET: ${SOCIAL_AUTH_VK_OAUTH2_SECRET}
       BOT_TOKEN: ${BOT_TOKEN}
     command: >
-      sh -c "python3 manage.py runbot"
+      sh -c "python3 src/manage.py runbot"
 volumes:
   postgres_data:
 #
