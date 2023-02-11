@@ -49,7 +49,7 @@ INSTALLED_APPS = [
 
     'core',
     'goals',
-    # 'bot',
+    'bot',
 
     'drf_spectacular'
 ]
@@ -149,6 +149,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+BOT_TOKEN = '5721626111:AAEyI3KidT_QU8UkOipGMspFG304PpeblY8'
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 SOCIAL_AUTH_JSONFIELD_CUSTOM = 'django.db.models.JSONField'
 SOCIAL_AUTH_VK_OAUTH2_KEY = env.str('SOCIAL_AUTH_VK_OAUTH2_KEY')
