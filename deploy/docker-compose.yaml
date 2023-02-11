@@ -68,7 +68,7 @@ services:
   bot:
     image: ${DOCKERHUB_USERNAME}/trying12:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     depends_on:
-      db:
+      postgres:
         condition: service_healthy
       api:
         condition: service_started
