@@ -87,3 +87,4 @@ services:
       sh -c "python3 manage.py runbot"
 volumes:
   postgres_data:
+#
