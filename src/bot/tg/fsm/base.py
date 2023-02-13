@@ -1,5 +1,3 @@
-
-
 from abc import ABC, abstractmethod
 from enum import Enum
 
@@ -31,7 +29,7 @@ class Storage(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def reset(self, chat_id: int) -> None:
+    def reset(self, chat_id: int) -> bool:
         raise NotImplementedError
 
     @abstractmethod

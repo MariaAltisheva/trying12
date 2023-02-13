@@ -1,29 +1,33 @@
-
-
 import logging
 import os
+from datetime import datetime
+from enum import IntEnum, auto
 
-from django.conf import settings
 from django.core.management import BaseCommand
 from pydantic import BaseModel
 
 from bot.models import TgUser
 from bot.tg.client import TgClient
 from bot.tg.fsm.memory_storage import MemoryStorage
-from bot.tg.fsm.states import StateEnum
 from bot.tg.models import Message
-from goals.models import BoardParticipant, Goal, GoalCategory
+from goals.models import Goal, GoalCategory
+from todolist import settings
 
 logger = logging.getLogger(__name__)
 
-
 class NewGoal(BaseModel):
-    cat_id: int | None
+    cat_id: int | None = None
     goal_title: str | None = None
 
     @property
-    def is_completed(self) -> bool:
+    def is_complete(self) -> bool:
         return None not in [self.cat_id, self.goal_title]
+
+
+class StateEnum(IntEnum):
+    CREATE_CATEGORY_SELECT = auto()
+    CHOSEN_CATEGORY = auto()
+
 
 
 class Command(BaseCommand):
@@ -42,19 +46,18 @@ class Command(BaseCommand):
         tg_user.save(update_fields=('verification_code',))
         self.tg_client.send_message(
             chat_id=msg.chat.id,
-            text=f'[verification_code] {tg_user.verification_code}'
+            text=f'[verification code] {tg_user.verification_code}'
         )
 
     def handle_goals_list(self, msg: Message, tg_user: TgUser):
-        goals = Goal.objects.filter(
-            category__board__participants__user_id=tg_user.user_id,
-            category__is_deleted=False
-        ).only('id', 'title')
-        result = [f'#{goal.id} {goal.title}' for goal in goals]
-        if result:
-            self.tg_client.send_message(msg.chat.id, '\n'.join(result))
+        resp_goals: list[str] = [
+            f'#{goal.id} {goal.title}'
+            for goal in Goal.objects.filter(user_id=tg_user.user_id).order_by('created')
+        ]
+        if resp_goals:
+            self.tg_client.send_message(msg.chat.id, '\n'.join(resp_goals))
         else:
-            self.tg_client.send_message(msg.chat.id, '[you have no goals!]')
+            self.tg_client.send_message(msg.chat.id, '[you have no goals]')
 
     def handle_goal_categories_list(self, msg: Message, tg_user: TgUser):
         resp_categories: list[str] = [
@@ -69,14 +72,13 @@ class Command(BaseCommand):
         else:
             self.tg_client.send_message(msg.chat.id, '[you have no categories]')
 
-    def handle_save_selected_category(self, msg: Message, tg_user: TgUser):
+    def handle_save_selected_category(self, msg: Message, tg_user:TgUser):
         if msg.text.isdigit():
-            cat_id = int(msg.text)
+            cat_id= int(msg.text)
             if GoalCategory.objects.filter(
-                    board__participants__user_id=tg_user.user_id,
-                    board__participants__role__in=[BoardParticipant.Role.owner, BoardParticipant.Role.writer],
-                    is_deleted=False,
-                    id=cat_id
+                board__participants__user_id=tg_user.user_id,
+                is_deleted=False,
+                id=cat_id
             ).exists():
                 self.storage.update_data(chat_id=msg.chat.id, cat_id=cat_id)
                 self.tg_client.send_message(msg.chat.id, '[set title]')
@@ -89,23 +91,22 @@ class Command(BaseCommand):
     def handle_save_new_cat(self, msg: Message, tg_user: TgUser):
         goal = NewGoal(**self.storage.get_data(tg_user.chat_id))
         goal.goal_title = msg.text
-        if goal.is_completed:
+        if goal.is_complete: ###
             Goal.objects.create(
                 title=goal.goal_title,
                 category_id=goal.cat_id,
                 user_id=tg_user.user_id,
-
+                due_date = datetime.now()
             )
             self.tg_client.send_message(msg.chat.id, '[New goal created]')
         else:
+            # TODO: Log
             self.tg_client.send_message(msg.chat.id, '[something went wrong]')
-
         self.storage.reset(tg_user.chat_id)
 
     def handle_verified_user(self, msg: Message, tg_user: TgUser):
         if msg.text == '/goals':
             self.handle_goals_list(msg, tg_user)
-
         elif msg.text == '/create':
             self.handle_goal_categories_list(msg, tg_user)
             self.storage.set_state(msg.chat.id, state=StateEnum.CREATE_CATEGORY_SELECT)
@@ -122,10 +123,14 @@ class Command(BaseCommand):
                 case StateEnum.CHOSEN_CATEGORY:
                     self.handle_save_new_cat(msg, tg_user)
                 case _:
-                    logger.warning('Invalid state %s', state)
+                    logger.warning('Invalid state: %s', state)
+
+
 
         elif msg.text.startswith('/'):
             self.tg_client.send_message(msg.chat.id, '[unknown command]')
+
+        ...
 
     def handle_message(self, msg: Message):
         tg_user, _ = TgUser.objects.select_related('user').get_or_create(
@@ -137,13 +142,13 @@ class Command(BaseCommand):
         if tg_user.user:
             self.handle_verified_user(msg=msg, tg_user=tg_user)
         else:
+            # New user
             self.handle_unverified_user(msg=msg, tg_user=tg_user)
 
     def handle(self, *args, **options):
         offset = 0
-
         while True:
-            response = self.tg_client.get_updates(offset=offset)
-            for item in response.result:
+            res = self.tg_client.get_updates(offset=offset)
+            for item in res.result:
                 offset = item.update_id + 1
                 self.handle_message(msg=item.message)

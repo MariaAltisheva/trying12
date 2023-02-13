@@ -1,4 +1,3 @@
-
 from enum import Enum
 
 from pydantic import BaseModel
@@ -19,7 +18,7 @@ class MemoryStorage(Storage):
     def _resolve_chat(self, chat_id: int):
         if chat_id not in self.data:
             self.data[chat_id] = StorageData()
-        return self.data[chat_id]
+            return self.data[chat_id]
 
     def get_state(self, chat_id: int) -> StorageData | None:
         return self._resolve_chat(chat_id).state
@@ -44,6 +43,3 @@ class MemoryStorage(Storage):
 
     def update_data(self, chat_id: int, **kwargs) -> None:
         self._resolve_chat(chat_id).data.update(**kwargs)
-
-    def get_all_data(self, chat_id: int) -> StorageData:
-        return self._resolve_chat(chat_id)
