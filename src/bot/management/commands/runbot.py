@@ -104,6 +104,33 @@ class Command(BaseCommand):
             self.tg_client.send_message(msg.chat.id, '[something went wrong]')
         self.storage.reset(tg_user.chat_id)
 
+    # def handle_verified_user(self, msg: Message, tg_user: TgUser):
+    #     if msg.text == '/goals':
+    #         self.handle_goals_list(msg, tg_user)
+    #     elif msg.text == '/create':
+    #         self.handle_goal_categories_list(msg, tg_user)
+    #         self.storage.set_state(msg.chat.id, state=StateEnum.CREATE_CATEGORY_SELECT)
+    #         self.storage.set_data(msg.chat.id, data=NewGoal().dict())
+    #
+    #     elif msg.text == '/cancel' and self.storage.get_state(tg_user.chat_id):
+    #         self.storage.reset(tg_user.chat_id)
+    #         self.tg_client.send_message(msg.chat.id, '[canceled]')
+    #
+    #     elif state := self.storage.get_state(tg_user.chat_id):
+    #         match state:
+    #             case StateEnum.CREATE_CATEGORY_SELECT:
+    #                 self.handle_save_selected_category(msg, tg_user)
+    #             case StateEnum.CHOSEN_CATEGORY:
+    #                 self.handle_save_new_cat(msg, tg_user)
+    #             case _:
+    #                 logger.warning('Invalid state: %s', state)
+    #
+    #
+    #
+    #     elif msg.text.startswith('/'):
+    #         self.tg_client.send_message(msg.chat.id, '[unknown command]')
+    #
+    #     ...
     def handle_verified_user(self, msg: Message, tg_user: TgUser):
         if msg.text == '/goals':
             self.handle_goals_list(msg, tg_user)
@@ -123,14 +150,11 @@ class Command(BaseCommand):
                 case StateEnum.CHOSEN_CATEGORY:
                     self.handle_save_new_cat(msg, tg_user)
                 case _:
-                    logger.warning('Invalid state: %s', state)
-
-
+                    logger.warning('Invalid state %s', state)
 
         elif msg.text.startswith('/'):
             self.tg_client.send_message(msg.chat.id, '[unknown command]')
 
-        ...
 
     def handle_message(self, msg: Message):
         tg_user, _ = TgUser.objects.select_related('user').get_or_create(
