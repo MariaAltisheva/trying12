@@ -100,7 +100,7 @@
 #             )
 #             self.tg_client.send_message(msg.chat.id, '[New goal created]')
 #         else:
-#             # TODO: Log
+
 #             self.tg_client.send_message(msg.chat.id, '[something went wrong]')
 #         self.storage.reset(tg_user.chat_id)
 #
@@ -327,3 +327,4 @@ class Command(BaseCommand):
             for item in res.result:
                 offset = item.update_id + 1
                 self.handle_message(msg=item.message)
+#
