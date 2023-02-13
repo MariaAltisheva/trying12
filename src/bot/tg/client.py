@@ -13,11 +13,9 @@ class TgClient:
     def get_updates(self, offset: int = 0, timeout: int = 60) -> GetUpdatesResponse:
         url = self.get_url('getUpdates')
         response = requests.get(url, params={'offset': offset, 'timeout': timeout})
-
         return GetUpdatesResponse(**response.json())
 
     def send_message(self, chat_id: int, text: str) -> SendMessageResponse:
         url = self.get_url('sendMessage')
-        response = requests.post(url, json={'chat_id': chat_id, 'text': text})
-
+        response  = requests.post(url, json={'chat_id': chat_id, 'text': text})
         return SendMessageResponse(**response.json())
