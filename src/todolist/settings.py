@@ -178,3 +178,4 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'API for todolist application',
     'VERSION': '1.0.0',
 }
+#
