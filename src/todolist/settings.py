@@ -19,6 +19,7 @@ env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False)
 )
+BOT_TOKEN = env('BOT_TOKEN')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -149,8 +150,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-# BOT_TOKEN = '6259513877:AAEzTUZEQNM1Ky6a2EyjgGfaZFNbvooMXxo'
-BOT_TOKEN = '6259513877:AAEzTUZEQNM1Ky6a2EyjgGfaZFNbvooMXxo'
+
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 SOCIAL_AUTH_JSONFIELD_CUSTOM = 'django.db.models.JSONField'
 SOCIAL_AUTH_VK_OAUTH2_KEY = env.str('SOCIAL_AUTH_VK_OAUTH2_KEY')
