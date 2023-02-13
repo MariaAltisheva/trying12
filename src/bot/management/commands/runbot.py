@@ -91,7 +91,7 @@ class Command(BaseCommand):
     def handle_save_new_cat(self, msg: Message, tg_user: TgUser):
         goal = NewGoal(**self.storage.get_data(tg_user.chat_id))
         goal.goal_title = msg.text
-        if goal.is_complete: ###
+        if goal.is_completed: ###
             Goal.objects.create(
                 title=goal.goal_title,
                 category_id=goal.cat_id,
