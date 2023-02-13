@@ -19,7 +19,7 @@ env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False)
 )
-BOT_TOKEN = env('BOT_TOKEN')
+BOT_TOKEN='6259513877:AAEzTUZEQNM1Ky6a2EyjgGfaZFNbvooMXxo'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
